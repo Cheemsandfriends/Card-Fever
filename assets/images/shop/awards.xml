@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="awards.png">
+	<!-- Created with Adobe Animate version 22.0.2.168 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="Icons instancia 10000" x="141" y="147" width="145" height="126" frameX="-11" frameY="-23" frameWidth="162" frameHeight="165"/>
+	<SubTexture name="Icons instancia 10001" x="2" y="147" width="134" height="165" frameX="-26" frameY="0" frameWidth="162" frameHeight="165"/>
+	<SubTexture name="Icons instancia 10002" x="2" y="2" width="159" height="145" frameX="-3" frameY="-10" frameWidth="162" frameHeight="165"/>
+	<SubTexture name="Icons instancia 10003" x="2" y="312" width="139" height="137" frameX="0" frameY="-18" frameWidth="162" frameHeight="165"/>
+	<SubTexture name="Icons instancia 10004" x="141" y="273" width="146" height="104" frameX="-14" frameY="-50" frameWidth="162" frameHeight="165"/>
+</TextureAtlas>

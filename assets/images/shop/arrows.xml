@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="arrows.png">
+	<!-- Created with Adobe Animate version 22.0.2.168 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="ArrowL instancia 10000" x="2" y="2" width="82" height="110" frameX="-23" frameY="-5" frameWidth="105" frameHeight="121"/>
+	<SubTexture name="ArrowL instancia 10001" x="2" y="2" width="82" height="110" frameX="-23" frameY="-5" frameWidth="105" frameHeight="121"/>
+	<SubTexture name="ArrowL instancia 10002" x="99" y="2" width="87" height="99" frameX="0" frameY="-10" frameWidth="105" frameHeight="121"/>
+	<SubTexture name="ArrowL instancia 10003" x="99" y="2" width="87" height="99" frameX="0" frameY="-10" frameWidth="105" frameHeight="121"/>
+	<SubTexture name="ArrowL instancia 10004" x="201" y="2" width="74" height="121" frameX="-31" frameY="0" frameWidth="105" frameHeight="121"/>
+	<SubTexture name="ArrowL instancia 10005" x="201" y="2" width="74" height="121" frameX="-31" frameY="0" frameWidth="105" frameHeight="121"/>
+	<SubTexture name="ArrowL instancia 10006" x="2" y="2" width="82" height="110" frameX="-23" frameY="-5" frameWidth="105" frameHeight="121"/>
+	<SubTexture name="ArrowR instancia 10000" x="290" y="2" width="72" height="119" frameX="-4" frameY="-3" frameWidth="105" frameHeight="128"/>
+	<SubTexture name="ArrowR instancia 10001" x="290" y="2" width="72" height="119" frameX="-4" frameY="-3" frameWidth="105" frameHeight="128"/>
+	<SubTexture name="ArrowR instancia 10002" x="377" y="2" width="80" height="103" frameX="-25" frameY="-8" frameWidth="105" frameHeight="128"/>
+	<SubTexture name="ArrowR instancia 10003" x="377" y="2" width="80" height="103" frameX="-25" frameY="-8" frameWidth="105" frameHeight="128"/>
+	<SubTexture name="ArrowR instancia 10004" x="472" y="2" width="66" height="128" frameX="0" frameY="0" frameWidth="105" frameHeight="128"/>
+	<SubTexture name="ArrowR instancia 10005" x="472" y="2" width="66" height="128" frameX="0" frameY="0" frameWidth="105" frameHeight="128"/>
+	<SubTexture name="ArrowR instancia 10006" x="290" y="2" width="72" height="119" frameX="-4" frameY="-3" frameWidth="105" frameHeight="128"/>
+</TextureAtlas>
