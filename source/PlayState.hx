@@ -1,5 +1,6 @@
 package;
 
+import flixel.ui.FlxBar;
 import Card.CardType;
 import flixel.util.FlxTimer;
 import flixel.text.FlxText;
@@ -12,6 +13,7 @@ import flixel.FlxSprite;
 import flixel.util.FlxColor;
 import flixel.FlxG;
 import flixel.FlxState;
+import flixel.tweens.misc.VarTween;
 
 class PlayState extends FlxState
 {
@@ -27,6 +29,8 @@ class PlayState extends FlxState
 
 	
 	var healthText:FlxText = null;
+
+	var bar:FlxBar = null;
 
 	override public function create()
 	{
@@ -44,7 +48,10 @@ class PlayState extends FlxState
 
 		enemy = new Character(100, 0, "assets/images/battle/enemy");
 		if (Player.fledCount > 0)
+		{
 			enemy.health += enemy.health * (0.15 * Player.fledCount);
+			enemy.damageBoost += FlxG.random.float(0.1, 2) * Player.fledCount;
+		}
 		enemy.powerups = [Health => FlxG.random.int(0, 3), Damage => FlxG.random.int(0, 2), Card => FlxG.random.int(0, 1)];
 		enemy.hurtSound = "hurtEnemy.ogg";
 		enemy.deathSound = "deathEnemy.ogg";
@@ -74,6 +81,11 @@ class PlayState extends FlxState
 		healthText = new FlxText(0, 0, "", 24);
 		healthText.visible = false;
 		add(healthText);
+		
+		bar = new FlxBar(0, 0, LEFT_TO_RIGHT, 50);
+		bar.visible = false;
+		add(bar);
+
 		ui = new UI();
 		add(ui);
 
@@ -142,6 +154,8 @@ class PlayState extends FlxState
 
 	var showingCards:Bool = false;
 	var playerTurn = true;
+
+	var tw:VarTween = null;
 	override public function update(elapsed:Float)
 	{
 		super.update(elapsed);
@@ -173,11 +187,11 @@ class PlayState extends FlxState
 					ui.enterSelection();
 				else
 				{
+					move = false;
 					cards.selectCard(()-> 
 					{
 						hurt(enemy, player, ui.select);
 						new FlxTimer().start(1, (_)-> FlxTween.tween(cards, {y: FlxG.height}, {ease: FlxEase.backIn}));
-						move = false;
 						showingCards = false;
 						ui.resetState();
 						ui.visibleButtons(false);
@@ -193,6 +207,8 @@ class PlayState extends FlxState
 				{
 					ui.resetState();
 					showingCards = false;
+					if (tw.percent != 1)
+						tw.cancel();
 					cards.y = FlxG.height;
 				}
 			}
@@ -207,7 +223,7 @@ class PlayState extends FlxState
 			if (!showingCards)
 			{
 				FlxG.sound.play("assets/sounds/flipcard.ogg");
-				FlxTween.tween(cards, {y: 0}, 1, {ease: FlxEase.backOut});
+				tw = FlxTween.tween(cards, {y: 0}, 1, {ease: FlxEase.backOut});
 				showingCards = true;
 				updateCards();
 			}
@@ -262,14 +278,21 @@ class PlayState extends FlxState
 			finishStuff();
 		var x = char.anim.curInstance.matrix.tx;
 		var y = char.anim.curInstance.matrix.ty;
-		healthText.setPosition(x + char.width * 0.5 + 20, y + char.height * 0.5 + 50);
+		healthText.setPosition(x + 20, y + char.height * 0.5 + 50);
 
 		healthText.text = Std.string(char.health);
+		bar.setPosition(healthText.x + (healthText.width - bar.width) * 0.5, healthText.y + healthText.height);
+		bar.value = char.health;
+
+		bar.visible = true;
 		healthText.visible = true;
 
 		card.uses--;
 
-		new FlxTimer().start(1, (_)-> healthText.visible = false);
+		new FlxTimer().start(1, (_)-> {
+			healthText.visible = false;
+			bar.visible = false;
+		});
 	}
 
 	function enemyTurn()
