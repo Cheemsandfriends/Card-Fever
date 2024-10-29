@@ -48,6 +48,7 @@ class MainState extends FlxUIState
 		}
 		camera.fade(3, true);
 		#if SHOP
+		Player.gold = 200;
 		FlxG.switchState(new ShopState());
 		return;
 		#elseif BATTLE

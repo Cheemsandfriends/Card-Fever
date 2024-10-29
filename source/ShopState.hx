@@ -1,5 +1,6 @@
 package;
 
+import flixel.sound.FlxSound;
 import flixel.math.FlxMath;
 import openfl.filters.ShaderFilter;
 import flixel.tweens.misc.VarTween;
@@ -95,12 +96,20 @@ class ShopState extends FlxUIState
 
     var fade:FlxSprite;
 
+    var purchase:FlxSound;
+
+    var bag:FlxAnimate;
+
+    var goldT:FlxText;
+
 	public override function create()
 	{
         FlxSprite.defaultAntialiasing = true;
 
         FlxG.sound.playMusic(AssetPaths.shop__ogg, 0., true);
         FlxG.sound.music.fadeIn();
+
+        purchase = loadSound("assets/sounds/purchase.ogg");
         
         purchasedCamera = new FlxCamera();
         purchasedCamera.bgColor = 0;
@@ -116,6 +125,12 @@ class ShopState extends FlxUIState
 		gradient.updateHitbox();
 		gradient.shader = new GradientStuff(0xFBDDFF, 0xF162F2).shader;
 		add(gradient);
+
+
+        bag = new FlxAnimate("assets/images/shop/bag", {Antialiasing: true});
+        bag.anim.play("MoneyBag");
+        
+        add(bag);
 
 
         #if true
@@ -145,6 +160,8 @@ class ShopState extends FlxUIState
         awardsText = new FlxText(awards.x, awards.y + awards.height, 0, 24);
 
         costText = new FlxText("", 24);
+        goldT = new FlxText("", 24);
+        goldT.color = 0xFFFEE002;
         
 
         updateSelection(0);
@@ -165,17 +182,18 @@ class ShopState extends FlxUIState
         add(awards);
         add(outOf);
         add(awardsText);
+        add(goldT);
         add(costText);
 
 
 		text = new FlxTypeText(bubble.x + 50, bubble.y + bubble.height * 0.5, Std.int(bubble.width - 50), "", 16);
 		text.color = 0;
 		text.sounds = [
-			FlxG.sound.load(Assets.getSound(AssetPaths.beep1__ogg)),
-			FlxG.sound.load(Assets.getSound(AssetPaths.beep2__ogg)),
-			FlxG.sound.load(Assets.getSound(AssetPaths.beep3__ogg)),
-			FlxG.sound.load(Assets.getSound(AssetPaths.beep4__ogg)),
-			FlxG.sound.load(Assets.getSound(AssetPaths.beep5__ogg)),
+			FlxG.sound.load("assets/sounds/beep1.ogg"),
+			FlxG.sound.load("assets/sounds/beep2.ogg"),
+			FlxG.sound.load("assets/sounds/beep3.ogg"),
+			FlxG.sound.load("assets/sounds/beep4.ogg"),
+			FlxG.sound.load("assets/sounds/beep5.ogg"),
 		];
 
 		text.cursorBlinkSpeed = 0.6;
@@ -201,6 +219,17 @@ class ShopState extends FlxUIState
 		fade.updateHitbox();
 		add(fade);
 	}
+
+    function loadSound(snd:String)
+    {
+        var sound = new FlxSound();
+
+        sound.loadEmbedded(snd);
+
+        FlxG.sound.list.add(sound);
+
+        return sound;
+    }
 
     var processL:Bool = false;
 	override function update(elapsed:Float)
@@ -244,6 +273,11 @@ class ShopState extends FlxUIState
                 startText(soldOutTexts[FlxG.random.int(0, soldOutTexts.length - 1)]);
 
             }
+            else if (cost[awardsInt] > Player.gold)
+            {
+                startText(poorTexts[FlxG.random.int(0, poorTexts.length - 1)]);
+
+            }
             else
             {
                     var powerup = int2Powerup();
@@ -280,7 +314,18 @@ class ShopState extends FlxUIState
         
         Player.Playerpowerups.set(powerup, Player.Playerpowerups[powerup] + 1);
 
-        FlxG.sound.play("assets/sounds/purchase.ogg");
+        purchase.play(true);
+        
+        bag.anim.onComplete.removeAll();
+        bag.anim.play("MoneyRip", true);
+        bag.anim.loopType = PlayOnce;
+        bag.anim.onComplete.addOnce(()->bag.anim.play("MoneyBag"));
+
+        goldT.text = Std.string(Player.gold) + "$";
+        goldT.setPosition(bag.x - goldT.width - 5, bag.y + 22.505);
+
+        Player.gold -= cost[awardsInt];
+
         startText(purchaseTexts[FlxG.random.int(0, purchaseTexts.length - 1)]);
         recalculateStuff(powerup);
 
@@ -377,8 +422,11 @@ class ShopState extends FlxUIState
 
         awardsText.text = infoTexts[awardsInt];
         awardsText.x = awards.x;
-        costText.text = Std.string(cost[awardsInt]);
+        costText.text = Std.string(cost[awardsInt]) + "$";
         costText.setPosition((awards.x + 72.5) - 20, awards.y - costText.height);
+        bag.setPosition(costText.x - 53.65, costText.y - 22.505);
+        goldT.text = Std.string(Player.gold) + "$";
+        goldT.setPosition(bag.x - goldT.width - 5, bag.y + 22.505);
         
         outOf.visible = soldOutItems[awardsInt];
     }

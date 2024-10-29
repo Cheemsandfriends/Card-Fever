@@ -17,6 +17,8 @@ class ResultsSubstate extends FlxSubState
     var leave:FlxText;
     var move:Bool = false;
     var checkedFade:Bool = false;
+
+    var bag:FlxAnimate;
     override function create() 
     {
         super.create();
@@ -32,6 +34,9 @@ class ResultsSubstate extends FlxSubState
             fledTxt.screenCenter();
             fledTxt.y -= 50;
             add(fledTxt);
+
+            if (_state.player.health <= 40)
+                Player.gold += Std.int(FlxG.random.int(20, 100) * ((1 - (_state.player.health) * 0.01)));
             FlxTween.tween(fledTxt, {alpha: 1}, 3);
         }
 
@@ -53,7 +58,7 @@ class ResultsSubstate extends FlxSubState
     {
         var lose = !_state.player.alive;
         var results = new FlxAnimate(310, 240, "assets/images/battle/results");
-
+        
         if (lose)
             results.anim.playElement(results.anim.curSymbol.getElement(0, 0));
         else
@@ -62,10 +67,12 @@ class ResultsSubstate extends FlxSubState
         
         results.anim.onComplete.add(()-> (lose) ? FlxG.switchState(new MainState()) : move = true);
 
+        var prevG = Player.gold;
+
         if (lose)
             Player.gold = 0;
         else
-            Player.gold += Std.int(10 + (10 * (1 - _state.player.health * 0.01)));
+            Player.gold += Std.int(10 + (10 * (1 - _state.player.health * 0.01)) * 10);
         if (lose)
             new FlxTimer().start(0.5, (_)->FlxG.sound.play("assets/sounds/writhing.ogg"));
         store.y = FlxG.height - store.height - 30;
