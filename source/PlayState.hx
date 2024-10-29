@@ -266,6 +266,8 @@ class PlayState extends FlxState
 				{
 					callerDamage = true;
 					caller.hurt(dmg);
+
+					char = caller;
 				}
 
 			case POTION:
@@ -278,9 +280,15 @@ class PlayState extends FlxState
 			finishStuff();
 		var x = char.anim.curInstance.matrix.tx;
 		var y = char.anim.curInstance.matrix.ty;
-		healthText.setPosition(x + 20, y + char.height * 0.5 + 50);
+		healthText.setPosition(x + 20, y + char.height * 0.5 - 50);
 
+		if (char != player)
+		{
+			healthText.x += 250;
+			healthText.y -= 270;
+		}
 		healthText.text = Std.string(char.health);
+
 		bar.setPosition(healthText.x + (healthText.width - bar.width) * 0.5, healthText.y + healthText.height);
 		bar.value = char.health;
 
