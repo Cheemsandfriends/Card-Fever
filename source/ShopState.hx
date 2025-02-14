@@ -199,7 +199,7 @@ class ShopState extends FlxUIState
 		text.cursorBlinkSpeed = 0.6;
 		text.skipKeys = [SPACE];
         #if true
-		text.completeCallback = () -> lucy.anim.symbolDictionary["Head"].getElementByName("Mouth", 0).symbol.loop = SingleFrame;
+		text.completeCallback = () -> lucy.anim.library.getSymbol("Head").getElementByName("Mouth", 0).symbol.loop = SingleFrame;
         #end
 		add(text);
 
@@ -404,9 +404,8 @@ class ShopState extends FlxUIState
 	{
 		text.resetText(str);
 		text.start();
-        #if true
-		lucy.anim.symbolDictionary["Head"].getElementByName("Mouth", 0).symbol.loop = Loop;
-        #end
+        
+		lucy.anim.library.getSymbol("Head").getElementByName("Mouth", 0).symbol.loop = Loop;
 	}
 
     function updateSelection(select:Int)
